@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, shrink-to-fit=no">
+<meta property="og:title" content="Lebanese Lira Converter" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://bothness.github.io/ldnloos/" />
+<meta property="og:image" content="https://bothness.github.io/ldnloos/img/og.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:description" content="A map of toilets in London based on data from London Loo Codes." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="description" content="A map of toilets in London based on data from London Loo Codes.">
+<title>London Loo Map</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin="" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" integrity="sha256-+bdWuWOXMFkX0v9Cvr3OWClPiYefDQz9GGZP/7xZxdc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" integrity="sha256-LWhzWaQGZRsWFrrJxg+6Zn8TT84k0/trtiHBc6qcGpY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70.0/dist/L.Control.Locate.min.css" integrity="sha256-Shsq+yU9HwDTVcpWKiwI2BrSaRfc+HdvwlOPyZa7EJA=" crossorigin="anonymous">
+<style>
+.fill {
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    width: auto;
+    height: auto;
+    z-index: -1;
+}
+.leaflet-bar-part-single {
+	text-align: center;
+	padding: 6px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- Nav bar -->
+<nav class="navbar navbar-light bg-light">
+<a class="navbar-brand" href="#">London Loo Map</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="navbar">
+<ul class="navbar-nav mr-auto">
+<li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">About</a></li>
+<li class="nav-item"><a class="nav-link" href="https://docs.google.com/spreadsheets/d/1NZc0IPV9SV_Wy9xoDckHbVDgJyeW2Str231Uz_e0Mg4/edit#gid=0" target="_blank">Get the data</a></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/bothness/ldnloos" target="_blank">Get the code</a></li>
+</ul>
+</div>
+</nav>
+
+<!-- Map -->
+<div id="map" class="fill"></div>
+
+<!-- Abou modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">About</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>This app automatically maps data collected by <a href="https://twitter.com/ldnloocodes" target="_blank">London Loo Codes</a>. Their data can be found in <a href="https://docs.google.com/spreadsheets/d/1NZc0IPV9SV_Wy9xoDckHbVDgJyeW2Str231Uz_e0Mg4/edit#gid=0" target="_blank">this spreadsheet</a>.</p>
+        <p>The app was coded by <a href="https://twitter.com/arkbarclay" target="_blank">Ahmad Barclay</a> and is shared under an Unlicense (no rights, no liability, no warranty). The source code can be found <a href="https://github.com/bothness/ldnloos" target="_blank">here</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.8/jquery.csv.min.js" integrity="sha256-zGo0JbZ5Sn6wU76MyVL0TrUZUq5GLXaFnMQCe/hSwVI=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js" integrity="sha512-WXoSHqw/t26DszhdMhOXOkI7qCiv5QWXhH9R7CgvgZMHz1ImlkVQ3uNsiQKu5wwbbxtPzFXd1hK4tzno2VqhpA==" crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster-src.js" integrity="sha256-UxMFwvJ2+HaHDi1Ik5WYCuUcv1yS+hS5QYitB0ev0JQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70.0/dist/L.Control.Locate.min.js" integrity="sha256-go/qcPf+sqZNEFMGLSm3MkbixRJeaz4jzT9AaTHuUt4=" crossorigin="anonymous"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
