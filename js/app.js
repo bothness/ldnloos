@@ -4,10 +4,23 @@
 
 // SET GLOBAL VARIABLES
 
-// URL of CSV files containing unofficial and official LBP rates & metadata on most recent updates
+// URL of CSV file containing geocoded data from London Loo Codes
 var csvurl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbHWPMZ4HIYQZMNIKgi2IILuE7UQeC2nj7yDaQah72dOx4BP0DtV_lVLAAZgwDDDp-EU5IUXe4nqCA/pub?gid=0&single=true&output=csv";
 var icourl = "img/marker.png"
 
+// Initialize event listeners for filter checkboxes
+var accessSelect = document.querySelector("input[name=access-select]");
+var genderSelect = document.querySelector("input[name=gender-select]");
+
+accessSelect.addEventListener("change", function(){
+  mapFeatures(accessSelect.checked, genderSelect.checked);
+});
+
+genderSelect.addEventListener("change", function(){
+  mapFeatures(accessSelect.checked, genderSelect.checked);
+});
+
+// Function to create geoJson object from flat Json data
 function geojson(features) {
   var geojson = {"type": "FeatureCollection", "features": []};
   for (feature in features) {
@@ -33,6 +46,7 @@ function geojson(features) {
   return geojson;
 }
 
+// Function to process features in geoJson for map layer
 function onEachFeature(feature, layer) {
   var name = feature.properties.name;
   var code = feature.properties.code;
@@ -63,29 +77,30 @@ function onEachFeature(feature, layer) {
   });
   layer.setIcon(myIcon);
   layer.on({
-        click: function (e) {
-          window.map.flyTo([lat, lon], 18);
-        }
-      });
+    click: function (e) {
+      window.map.flyTo([lat, lon], 18);
+    }
+  });
 }
 
+// Function to initialize map
 function makeMap(geopoints) {
   var tiles = L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png ', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   });
-  var markers = L.markerClusterGroup();
+  window.markers = L.markerClusterGroup();
   var geoJsonLayer = L.geoJson(geopoints, {onEachFeature: onEachFeature});
-  markers.addLayer(geoJsonLayer);
+  window.markers.addLayer(geoJsonLayer);
 
   window.map = L.map('map', {zoomControl: false}).addLayer(tiles);
-  window.map.addLayer(markers);
+  window.map.addLayer(window.markers);
 
-  L.control.zoom({position: "bottomright"}).addTo(map);
+  L.control.zoom({position: "topleft"}).addTo(map);
 
   L.control.locate(
     {
-      position: "bottomright",
+      position: "topleft",
       icon: "fa fa-compass",
       locateOptions: {
         maxZoom: 18,
@@ -96,10 +111,47 @@ function makeMap(geopoints) {
       }
     }).addTo(map);
 
-  window.map.fitBounds(markers.getBounds());
+  window.map.fitBounds(window.markers.getBounds());
+
+  L.Control.Filter = L.Control.extend({
+    onAdd: function(map) {
+      var div = L.DomUtil.create('div', 'leaflet-control-layers');
+      div.id = "filter-control";
+      return div;
+    }
+  });
+  L.control.filter = function(opts) {
+    return new L.Control.Filter(opts);
+  }
+
+  L.control.filter({ position: 'bottomleft' }).addTo(map);
+  $('#filters').appendTo('#filter-control');
 }
 
-// Read metadata CSV file, convert to json
+// Function to update the map features when filters are selected
+function mapFeatures(accessSelect, genderSelect) {
+  var geoJsonLayer = L.geoJson(geojson, {
+    onEachFeature: onEachFeature,
+    filter: function(feature, layer) {
+      if (accessSelect == false && genderSelect == false) {
+        return true;
+      } else if (accessSelect == true && genderSelect == false) {
+        return feature.properties.accessible.charAt(0).toLowerCase() == "y";
+      } else if (accessSelect == false && genderSelect == true) {
+        return feature.properties.gender.charAt(0).toLowerCase() == "y";
+      } else {
+        return feature.properties.accessible.charAt(0).toLowerCase() == "y" && feature.properties.gender.charAt(0).toLowerCase() == "y";
+      }
+    }
+  });
+  window.markers.clearLayers();
+  window.markers.addLayer(geoJsonLayer);
+  window.map.addLayer(window.markers);
+  window.map.flyToBounds(window.markers.getBounds());
+}
+
+// INITIALIZE THE MAP ON LOAD
+// Fetch CSV file, convert to json, convert json to geoJson, initialize map
 fetch(csvurl).then((response) => {
     return response.text();
 })
