@@ -5,7 +5,7 @@
 // SET GLOBAL VARIABLES
 
 // URL of CSV file containing geocoded data from London Loo Codes
-var csvurl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbHWPMZ4HIYQZMNIKgi2IILuE7UQeC2nj7yDaQah72dOx4BP0DtV_lVLAAZgwDDDp-EU5IUXe4nqCA/pub?gid=0&single=true&output=csv";
+var csvurl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSPCH12cLRRJCZpMvalSOImqcHuDXs9BW7aCtBiGXBRf6wFAMPKOI7_40nkCS-TFoouT44RCSApPDpE/pub?gid=0&single=true&output=csv";
 var icourl = "img/marker.png"
 
 // Initialize event listeners for filter checkboxes
