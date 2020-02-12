@@ -18,21 +18,33 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
 <style>
+.leaflet-container {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
 .fill {
-    top: 56px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-    width: auto;
-    height: auto;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  width: auto;
+  height: auto;
 }
 .leaflet-bar-part-single {
-	text-align: center;
-	padding: 6px 0;
+  text-align: center;
+  padding: 6px 0;
 }
 #filter-control {
   padding: 8px;
+}
+.leaflet-left {
+  transform: scale(1.25);
+}
+.leaflet-top {
+  transform-origin: top left;
+}
+.leaflet-bottom {
+  transform-origin: bottom left;
 }
 </style>
 </head>
@@ -40,7 +52,7 @@
 
 <!-- Nav bar -->
 <nav class="navbar navbar-light bg-light" style="z-index: 1;">
-<a class="navbar-brand" href="#">London Loo Map</a>
+<a class="navbar-brand font-weight-bold" href="#">LONDON LOO MAP</a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 <div class="collapse navbar-collapse" id="navbar">
 <ul class="navbar-nav mr-auto">
