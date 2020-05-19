@@ -24,7 +24,9 @@ genderSelect.addEventListener("change", function(){
 function geojson(features) {
   var geojson = {"type": "FeatureCollection", "features": []};
   for (feature in features) {
-    if ($.isNumeric(features[feature].longitude) && $.isNumeric(features[feature].latitude)) {
+    let lng = features[feature].longitude;
+    let lat = features[feature].latitude;
+    if ($.isNumeric(lng) && $.isNumeric(lat) && lng < 1 && lng > -1 && lat < 52 && lat > 51) {
       var loo = {
         "type": "Feature",
         "geometry": {
